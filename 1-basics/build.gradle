@@ -7,6 +7,9 @@ project.task("task1")
 task("task2")
 task "task3"
 task task4
+task4.doLast {
+    println "doLast of " + name
+}
 
 /**
 Defining properties and actions of tasks
@@ -25,7 +28,7 @@ task1.doLast {
 // The same as Task
 task2 {
     description "The description of $name"
-    dependsOn task1 // This makes task1 runs first
+    dependsOn task1, task4 // This makes task1 runs first
     doFirst {
         println "doFirst of $name"
     }

@@ -1,0 +1,33 @@
+// Full reference: https://docs.gradle.org/current/dsl/index.html under "Task types"
+
+// With all specs defined inline
+task copyFiles(type: Copy) {
+    exclude "1.txt"
+    from "src"
+    into "dest"
+}
+
+// Using a reuseable "copySpec"
+def contentSpec = copySpec {
+    // exclude "*.txt"
+    exclude {
+        // "it" is an interator that iterators through files
+        it.file.name.endsWith("txt")
+    }
+    from "src"
+}
+task copyFilesWithCopySpec(type: Copy) {
+    with contentSpec
+    into "dest"
+}
+
+// Changes file content as the copy actions runs
+task copyAndReplace(type: Copy) {
+    include "2.json"
+    from "src"
+    into "dest"
+    expand ([
+        // This tells gradle to look for variable like "$content"
+        content: "message"
+    ])
+}

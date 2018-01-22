@@ -1,0 +1,58 @@
+/**
+Different ways to create new tasks
+Run "gradle task --all" to show all tasks availabe for the project
+*/
+// The project object is visible globally and it's the default parent object
+project.task("task1")
+task("task2")
+task "task3"
+task task4
+
+/**
+Defining properties and actions of tasks
+*/
+// "name" variable is only abailable inside a closure
+task1.description = "The description of task1"
+
+task1.doFirst {
+    println "doFirst of " + name
+}
+task1.doLast {
+    // "$var" lets strings interpret the content of a varialbe
+    println "doLast of $name"
+}
+
+// The same as Task
+task2 {
+    description "The description of $name"
+    dependsOn task1 // This makes task1 runs first
+    doFirst {
+        println "doFirst of $name"
+    }
+    doFirst {
+        // Gets printed "before" the first doFirst
+        println "2nd doFirst of $name"
+    }
+    doLast {
+        println "doLast of $name"
+    }
+    doLast {
+        // Gets printed "after" the first doLast
+        println "2nd doLast of $name"
+    }
+}
+
+/**
+Defining variables
+*/
+ext.crossBuildVar = "Visible across multiple build files"
+def fileScopeVar = "Visible within current build file"
+task varDemo {
+    def taskScopeVar = "Visible within $name task"
+
+    doFirst {
+        println "Extended scope var: $crossBuildVar"
+        println "File scope var: $fileScopeVar"
+        println "Task scope var: $taskScopeVar"
+    }
+}

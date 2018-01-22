@@ -1,0 +1,30 @@
+task mustAfter {
+    // Does not ignore circular dependencies
+    mustRunAfter mustAfter
+    doLast {
+        println name
+    }
+}
+
+task shouldAfter {
+    // Ignores circular dependencies
+    shouldRunAfter shouldAfter
+    doLast {
+        println name
+    }
+}
+
+task broken {
+    dependsOn mustAfter, shouldAfter
+    doLast {
+        println name
+    }
+}
+
+task finalized {
+    // Makes "shouldAfter" task runs after this task
+    finalizedBy shouldAfter
+    doLast {
+        println name
+    }
+}
